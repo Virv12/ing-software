@@ -1,130 +1,65 @@
 <?php
-/**
- * Template Name : index
- */
+require_once('utils/Configurazione.php');
+$config = Configurazione::load();
 ?>
-<!--
 <!DOCTYPE html>
+<html lang="it-it">
 <head>
-    <title>genera prospetti di laurea</title>
-    <style type = "text/css">
-        body{
-            text-align: center;
-            background-color: whitesmoke;
-            font-size: larger;
-        }
-        button{
-            color: white;
-            background-color: red;
-            padding: 0.5em;
-            margin: 0.5em;
-            border-radius: 5px;
-        }
-
-    </style>
-</head> -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Genera Prospetti di Laurea</title>
-    <style type="text/css">
-        body {
-            text-align: center;
-            background-color: whitesmoke;
-            font-size: larger;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        button {
-
-            color: white;
-            background-color: red;
-            padding: 0.5em;
-            margin: 0.5em;
-            border-radius: 5px;
-        }
-        select, textarea, input {
-            margin: 0.5em;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Laureandosi 2.1 - Gestione Prospetti Laurea </title>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
-<body >
-<h1> genera prospetti di laurea </h1>
+<body>
+    <div class="container">
+        <h2> Gestione Prospetti Laurea </h2>
+        <form action="generaProspetti.php" method="get" id="main-form">
+            <label for="cdl">
+                Cdl:
+            </label>
+            <select name="cdl" id="cdl" required tabindex="0">
+                <option hidden value="">Seleziona un Cdl</option>
+                <optgroup label="Corsi di Laurea disponibili">
+                    <?php
+                    foreach ($config->corsi_di_laurea as $cdl => $value) {
+                        $name = htmlspecialchars($cdl);
+                        echo "<option>{$name}</option>";
+                    }
+                    ?>
+                </optgroup>
+            </select>
 
+            <label for="matricole">
+                Matricole:
+            </label>
+            <textarea
+                name="matricole" id="matricole"
+                rows="7" cols="15"
+                placeholder="Incolla le matricole qui"
+                required tabindex="1"></textarea>
 
-<form action = "generaProspetti.php" method = "get">
+            <label for="data_laurea">
+                Data Laurea:
+            </label>
+            <input type="date" name="data_laurea" id="data_laurea" min="<?= date("Y-m-d") ?>" required tabindex="2">
 
-    <h1> Laureandosi 2 - Gestione Lauree </h1>
-    <!-- campi  -->
+            <button type="submit" title="Crea i prospetti" tabindex="3">
+                Crea Prospetti
+            </button>
+        </form>
 
-    <p>Cdl:</p>
-    <select name = "cdl"><!-- tutti quelli dei test  -->
-        <option name = "cdl">T. Ing. Informatica</option>
-        <option name = "cdl">M. Cybersecurity</option>
-        <option name = "cdl">M. Ing. Elettronica</option>
-        <option name = "cdl">T. Ing. Biomedica</option>
-        <option name = "cdl">M. Ing. Biomedica, Bionics Engineering</option>
-        <option name = "cdl">T. Ing. Elettronica</option>
-        <option name = "cdl">T. Ing. delle Telecomunicazioni</option>
-        <option name = "cdl">M. Ing. delle Telecomunicazioni</option>
-        <option name = "cdl">M. Computer Engineering, Artificial Intelligence and Data Enginering</option>
-        <option name = "cdl">M. Ing. Robotica e della Automazione"</option>
-    </select>
+        <form action="inviaProspetti.php" method="get" id="second-form">
+            <div class="download-link">
+                <a
+                    href="run/prospettoCommissione.pdf"
+                    target="_blank"
+                    tabindex="4">Apri Prospetti</a>
+            </div>
 
-    <br>
-
-    <p>Matricole:</p>
-    <textarea name = "matricole"></textarea>
-
-    <br>
-
-    <p>Data Laurea:</p>
-    <input type = "date" name = "data_laurea"/>
-
-    <br>
-    <br>
-    <br>
-
-    <!-- bottoni  -->
-    <button type = "submit">
-        Crea Prospetti
-    </button>
-
-
-
-</form>
-<form action = "inviaProspetti.php" method = "get">
-
-<br>
-<br>
-
-
-    <button type = "submit"> Invia Prospetti </button>
-
-
-</form>
-
-<!--</form
-action = "index.php" method = "get">-->
-<br>
-<!-- <a href = "data/pdf_generati/prospettoCommissione.pdf"> Apri prospetti</a>   -->
-<?php
-require_once('C:\Users\franc\Local Sites\genera-prospetti-laurea\app\public\utils\AccessoProspetti.php');
-$accesso = new AccessoProspetti;
-$aux = $accesso->fornisciAccesso();
-echo '<a href="' . $aux . '" download> Apri Prospetti</a>'
-?>
-<br>
-<!--</form> -->
-<br>
-<br>
-<a href="indexTEST.php">Vai alla pagina 2</a>
-
-<a href = "indexCONF.php"> Vai alla pagina del configuratore</a>
+            <button type="submit" title="Invia i prospetti appena creati" tabindex="5">
+                Invia Prospetti
+            </button>
+        </form>
+    </div>
 </body>
+</html>

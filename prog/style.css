@@ -1,0 +1,214 @@
+:root {
+    --w: 800px;
+    --gap: 5px;
+    --row-h: 2em;
+}
+
+.container > h2 {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    height: var(--row-h);
+    width: 100%;
+    margin: 0;
+
+    user-select: none;
+}
+.container > p {
+    position: absolute;
+    left: 0;
+    top: calc(var(--row-h) + var(--gap));
+
+    height: var(--row-h);
+    width: 100%;
+    margin: 0;
+
+    text-align: center;
+    user-select: none;
+}
+.container > #go-back {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    height: var(--row-h);
+    width: 100%;
+    margin: 0;
+
+    text-align: center;
+    user-select: none;
+}
+#main-form {
+    position: absolute;
+    width: calc(var(--w) - 3 * var(--gap));
+    height: calc(5 * var(--row-h));
+    left: var(--gap);
+    top: calc(var(--row-h) + var(--gap));
+
+    display: grid;
+    grid-template-columns: 15% 12% 48% 25%;
+    grid-template-areas:
+    "l1 l1 l2 ."
+    "i1 i1 i2 b1"
+    "l3 i3 i2 ."
+    ".  .  i2 .";
+    grid-template-rows: repeat(4, var(--row-h));
+    gap: var(--gap);
+}
+label[for="cdl"] {
+    grid-area: l1;
+}
+#cdl {
+    grid-area: i1;
+    height: var(--row-h);
+    /*padding-block: .5em;*/
+}
+label[for="matricole"] {
+    grid-area: l2;
+}
+#matricole {
+    grid-area: i2;
+}
+label[for="data_laurea"] {
+    grid-area: l3;
+    padding-block: calc(.25 * var(--row-h));
+}
+#data_laurea {
+    grid-area: i3;
+    background-color: transparent;
+    border: 1px solid;
+    cursor: pointer;
+    height: var(--row-h);
+    width: 100%;
+}
+#main-form > button[type="submit"] {
+    grid-area: b1;
+}
+
+#second-form {
+    position: absolute;
+    width: calc(25% - var(--gap));
+    height: calc(2 * var(--row-h) - var(--gap));
+    margin: 0;
+    padding: 0;
+
+    right: var(--gap);
+    bottom: calc(2em + var(--gap));
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: var(--gap);
+}
+#second-form > .download-link {
+    height: var(--row-h);
+    width: 100%;
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+body {
+    background-color: whitesmoke;
+    font-size: larger;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    min-width: 350px;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+
+    --text-color: #3472ad;
+    --bg-color: #deebf7;
+    --button-bg-color: #c0d4f5;
+    --progress-gradient-to: #056fd2;
+    --text-red-color: #c66424;
+}
+
+a, a:active, a:visited {
+    color: var(--text-color);
+}
+a[target=_blank]::after {
+    content: ' 🗁';
+    text-decoration: none !important;
+    user-select: none;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    display: inline-block;
+}
+a[target=_blank]:hover::after {
+    opacity: 1;
+}
+.hidden {
+    display: none !important;
+}
+.invisible {
+    visibility: hidden;
+}
+
+.container {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 2px solid;
+
+    min-width: calc(var(--w) + 2 * var(--gap));
+    width: calc(var(--w) + 2 * var(--gap));
+    height: calc(2 * var(--gap) + 6 * var(--row-h));
+
+    position: relative;
+    overflow: hidden;;
+}
+
+
+textarea {
+    resize: none;
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+}
+h1, h2 {
+    text-align: center;
+}
+select {
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+    color: var(--text-color);
+    background-color: var(--button-bg-color);
+    padding: 0.5em;
+    border-radius: 2px;
+    border: 1px solid;
+}
+button:disabled {
+    filter: blur(.4px);
+    cursor: not-allowed;
+}
+label {
+    font-weight: bolder;
+    font-size: calc(.5 * var(--row-h));
+    padding-block: calc(.5 * var(--row-h)) 0;
+}
+select, input {
+    padding: unset;
+    height: calc(.5 * var(--row-h));
+    margin-block: calc(.25 * var(--row-h));
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+}
+label, select, input {
+    user-select: none;
+    text-align: left;
+    height: var(--row-h);
+    width: 100%;
+    direction: ltr;
+}

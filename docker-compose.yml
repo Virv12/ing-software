@@ -1,0 +1,12 @@
+services:
+  php:
+    build: .
+    volumes:
+      - ./prog:/var/www/html
+    ports:
+      - "8000:8000"
+
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
