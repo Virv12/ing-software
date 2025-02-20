@@ -16,12 +16,14 @@
     require_once('test/TestCarrieraLaureando.php');
     require_once('test/TestCarrieraLaureandoInformatica.php');
     require_once('test/TestConfigurazione.php');
+    require_once('test/TestProspettoLaureando.php');
 
     $tests = [
         new TestGestioneCarrieraStudente(),
         new TestCarrieraLaureando(),
         new TestCarrieraLaureandoInformatica(),
         new TestConfigurazione(),
+        new TestProspettoLaureando(),
     ];
 
     foreach ($tests as $test) {

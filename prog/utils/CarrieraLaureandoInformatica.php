@@ -4,20 +4,20 @@ require_once('utils/GestioneCarrieraStudente.php');
 
 class CarrieraLaureandoInformatica extends CarrieraLaureando
 {
-    private string $dataImmatricolazione;
-    private string $dataLaurea;
-    private float $mediaEsamiInformatici;
-    private bool $bonus;
+    public string $annoImmatricolazione;
+    public string $dataLaurea;
+    public bool $bonus;
 
     public function __construct(string $matricola, string $cdl, string $dataLaurea){
-        parent::__construct($matricola, $cdl);
-        $this->dataLaurea = $dataLaurea;
-        $this->bonus = false;
-
+        $anagrafica = GestioneCarrieraStudente::restituisciAnagraficaStudente($matricola);
         $carriera = GestioneCarrieraStudente::restituisciCarrieraStudente($matricola);
 
-        $this->dataImmatricolazione = $carriera["Esami"]["Esame"][0]["ANNO_IMM"];
-        $fine_bonus = ($this->dataImmatricolazione + 4) . ("-05-01");
+        $this->contructFromGCS($anagrafica, $carriera);
+        $this->dataLaurea = $dataLaurea;
+        $this->annoImmatricolazione = $carriera["Esami"]["Esame"][0]["ANNO_IMM"];
+
+        $this->bonus = false;
+        $fine_bonus = ($this->annoImmatricolazione + 4) . ("-05-01");
         if ($dataLaurea < $fine_bonus) {
             $this->bonus = true;
             $this->applicaBonus();
@@ -29,26 +29,19 @@ class CarrieraLaureandoInformatica extends CarrieraLaureando
                 $esame->informatico = true;
             }
         }
-        $this->calcolaMediaEsamiInformatici();
-        $this->calcola_media();
     }
 
     public function getMediaEsamiInformatici(): float
-    {
-        return $this->mediaEsamiInformatici;
-    }
-
-    public function calcolaMediaEsamiInformatici(): void
     {
         $somma = 0;
         $numero = 0;
         foreach ($this->esami as $esame) {
             if ($esame->faMedia && $esame->informatico) {
-                $somma += (int)$esame->votoEsame;
-                $numero++;
+                $somma += (int)$esame->votoEsame * (int)$esame->cfu;
+                $numero += (int)$esame->cfu;
             }
         }
-        $this->mediaEsamiInformatici = $somma / $numero;
+        return $somma / $numero;
     }
 
     public function getBonus(): bool

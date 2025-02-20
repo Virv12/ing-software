@@ -5,6 +5,5 @@ class EsameLaureando
 	public int $votoEsame;
 	public int $cfu;
 	public bool $faMedia;
-	public bool $curricolare;
 	public bool $informatico = false;
 }

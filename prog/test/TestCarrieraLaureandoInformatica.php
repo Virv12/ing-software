@@ -7,13 +7,13 @@ class TestCarrieraLaureandoInformatica extends Test
     {
         $val = new CarrieraLaureandoInformatica("123456", "T. Ing. Informatica", "2024-01-05");
         $aspettato = false;
-        if ($aspettato != $val->getBonus()) {
+        if ($aspettato !== $val->getBonus()) {
             throw new Exception("bonus non calcolato correttamente");
         }
 
         $val1 = new CarrieraLaureandoInformatica("123456", "T. Ing. Informatica", "2018-01-05");
-        $aspettato1 = "SI";
-        if ($aspettato1 != $val1->getBonus()) {
+        $aspettato1 = true;
+        if ($aspettato1 !== $val1->getBonus()) {
             throw new Exception("bonus non calcolato correttamente");
         }
     }

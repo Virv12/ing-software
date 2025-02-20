@@ -1,9 +1,13 @@
 <?php
-require_once('utils/InvioPDFLaureando.php');
+require_once('utils/Appello.php');
 
-$invio = new InvioPDFLaureando();
-$invio->invioProspetti();
-$msg = "i prospetti sono stati inviati";
+$appello = Appello::carica();
+$res = $appello->inviaProspetti();
+if ($res) {
+    $msg = "i prospetti sono stati inviati";
+} else {
+    $msg = "errore nell'invio dei prospetti";
+}
 ?>
 <!DOCTYPE html>
 <html lang="it-it">

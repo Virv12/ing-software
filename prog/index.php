@@ -43,8 +43,8 @@ $config = Configurazione::load();
             </label>
             <input type="date" name="data_laurea" id="data_laurea" min="<?= date("Y-m-d") ?>" required tabindex="2">
 
-            <button type="submit" title="Crea i prospetti" tabindex="3">
-                Crea Prospetti
+            <button type="submit" tabindex="3">
+                Genera Prospetti
             </button>
         </form>
 

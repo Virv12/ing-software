@@ -3,45 +3,49 @@ require_once('utils/CorsoDiLaurea.php');
 require_once('utils/Configurazione.php');
 require_once('utils/EsameLaureando.php');
 require_once('utils/GestioneCarrieraStudente.php');
+require_once('utils/CarrieraLaureandoInformatica.php');
 
 class CarrieraLaureando
 {
     public string $matricola;
     public string $nome;
     public string $cognome;
-    public CorsoDiLaurea $cdl;
     public string $email;
     public array $esami;
 
-    private float $media;
-
-    public function __construct(string $matricola, string $cdl)
+    public function __construct(string $matricola)
     {
-        $this->matricola = $matricola;
-
         $anagrafica = GestioneCarrieraStudente::restituisciAnagraficaStudente($matricola);
         $carriera = GestioneCarrieraStudente::restituisciCarrieraStudente($matricola);
+        $this->contructFromGCS($anagrafica, $carriera);
+    }
 
-        $config = Configurazione::load();
-
+    protected function contructFromGCS(array $anagrafica, array $carriera): void
+    {
+        $this->matricola = $carriera["Esami"]["Esame"][0]["MATRICOLA"];
         $this->nome = $anagrafica["Entries"]["Entry"]["nome"];
         $this->cognome = $anagrafica["Entries"]["Entry"]["cognome"];
         $this->email = $anagrafica["Entries"]["Entry"]["email_ate"];
-        $this->cdl = $config->corsi_di_laurea[$cdl];
-        $this->esami = array();
 
+        $this->esami = array();
         foreach ($carriera["Esami"]["Esame"] as $esame) {
-            if (!is_string($esame["DES"])) continue;
-            $esame = $this->make_esame($esame["DES"], $esame["VOTO"], $esame["PESO"], 1);
+            $esame = $this->make_esame($esame["DES"], $esame["VOTO"], $esame["PESO"]);
             if ($esame) {
                 array_push($this->esami, $esame);
             }
         }
-
-        $this->calcola_media();
     }
 
-    public function calcola_media(): void
+    public static function forseInformatico(string $matricola, string $cdl, string $dataLaurea): CarrieraLaureando
+    {
+        if ($cdl == "T. Ing. Informatica") {
+            return new CarrieraLaureandoInformatica($matricola, $cdl, $dataLaurea);
+        } else {
+            return new CarrieraLaureando($matricola);
+        }
+    }
+
+    public function getMedia(): float
     {
         $somma_voto_cfu = 0;
         $somma_cfu_tot = 0;
@@ -53,27 +57,21 @@ class CarrieraLaureando
             }
         }
 
-        $this->media = $somma_voto_cfu / $somma_cfu_tot;
+        return $somma_voto_cfu / $somma_cfu_tot;
     }
 
-    public function getMedia(): float
-    {
-        return $this->media;
-    }
-
-    public function creditiCurricolariConseguiti(): int
+    public function getCreditiCurricolariConseguiti(): int
     {
         $crediti = 0;
         foreach ($this->esami as $esame) {
             if ($esame->nomeEsame == "PROVA FINALE") continue;
             if ($esame->nomeEsame == "LIBERA SCELTA PER RICONOSCIMENTI") continue;
-            if (!$esame->curricolare) continue;
             $crediti += $esame->cfu;
         }
         return $crediti;
     }
 
-    public function creditiCheFannoMedia(): int
+    public function getCreditiCheFannoMedia(): int
     {
         $crediti = 0;
         foreach ($this->esami as $esame) {
@@ -83,13 +81,23 @@ class CarrieraLaureando
         return $crediti;
     }
 
-    private function make_esame($nome, $voto, $cfu, $curricolare): ?EsameLaureando
+    public function getVotoTesi(): int
+    {
+        foreach ($this->esami as $esame) {
+            if ($esame->nomeEsame == "PROVA FINALE") {
+                return $esame->votoEsame;
+            }
+        }
+        return 0;
+    }
+
+    private function make_esame($nome, $voto, $cfu): ?EsameLaureando
     {
         if (!is_string($nome)) return null;
         if ($nome == "TEST DI VALUTAZIONE DI INGEGNERIA") return null;
 
         $faMedia = !($nome == "PROVA FINALE" || !$voto);
-        if ($voto == "30  e lode") {
+        if ($voto == "30  e lode" || $voto == "30 e lode") {
             // -_- ci hanno messo 2 spazi
             $voto = 33;
         }
@@ -99,17 +107,6 @@ class CarrieraLaureando
         $esame->votoEsame = (int)$voto;
         $esame->cfu = (int)$cfu;
         $esame->faMedia = $faMedia;
-        $esame->curricolare = $curricolare;
         return $esame;
-    }
-
-    public function getVotoDiTesi(): int
-    {
-        foreach ($this->esami as $esame) {
-            if ($esame->nomeEsame == "PROVA FINALE") {
-                return $esame->votoEsame;
-            }
-        }
-        return 0;
     }
 }
