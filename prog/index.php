@@ -21,7 +21,7 @@ $config = Configurazione::load();
                 <option hidden value="">Seleziona un Cdl</option>
                 <optgroup label="Corsi di Laurea disponibili">
                     <?php
-                    foreach ($config->corsi_di_laurea as $cdl => $value) {
+                    foreach ($config->corsiDiLaurea as $cdl => $value) {
                         $name = htmlspecialchars($cdl);
                         echo "<option>{$name}</option>";
                     }

@@ -29,7 +29,7 @@ class CarrieraLaureando
 
         $this->esami = array();
         foreach ($carriera["Esami"]["Esame"] as $esame) {
-            $esame = $this->make_esame($esame["DES"], $esame["VOTO"], $esame["PESO"]);
+            $esame = $this->makeEsame($esame["DES"], $esame["VOTO"], $esame["PESO"]);
             if ($esame) {
                 array_push($this->esami, $esame);
             }
@@ -47,17 +47,17 @@ class CarrieraLaureando
 
     public function getMedia(): float
     {
-        $somma_voto_cfu = 0;
-        $somma_cfu_tot = 0;
+        $num = 0;
+        $den = 0;
 
         foreach ($this->esami as $esame) {
             if ($esame->faMedia) {
-                $somma_voto_cfu += (int)$esame->votoEsame * (int)$esame->cfu;
-                $somma_cfu_tot += (int)$esame->cfu;
+                $num += (int)$esame->votoEsame * (int)$esame->cfu;
+                $den += (int)$esame->cfu;
             }
         }
 
-        return $somma_voto_cfu / $somma_cfu_tot;
+        return $num / $den;
     }
 
     public function getCreditiCurricolariConseguiti(): int
@@ -91,7 +91,7 @@ class CarrieraLaureando
         return 0;
     }
 
-    private function make_esame($nome, $voto, $cfu): ?EsameLaureando
+    private function makeEsame($nome, $voto, $cfu): ?EsameLaureando
     {
         if (!is_string($nome)) return null;
         if ($nome == "TEST DI VALUTAZIONE DI INGEGNERIA") return null;

@@ -4,9 +4,9 @@ require_once('utils/GestioneCarrieraStudente.php');
 
 class CarrieraLaureandoInformatica extends CarrieraLaureando
 {
-    public string $annoImmatricolazione;
-    public string $dataLaurea;
-    public bool $bonus;
+    private int $annoImmatricolazione;
+    private string $dataLaurea;
+    private bool $bonus;
 
     public function __construct(string $matricola, string $cdl, string $dataLaurea){
         $anagrafica = GestioneCarrieraStudente::restituisciAnagraficaStudente($matricola);
@@ -17,15 +17,15 @@ class CarrieraLaureandoInformatica extends CarrieraLaureando
         $this->annoImmatricolazione = $carriera["Esami"]["Esame"][0]["ANNO_IMM"];
 
         $this->bonus = false;
-        $fine_bonus = ($this->annoImmatricolazione + 4) . ("-05-01");
-        if ($dataLaurea < $fine_bonus) {
+        $fineBonus = ($this->annoImmatricolazione + 4) . ("-05-01");
+        if ($dataLaurea < $fineBonus) {
             $this->bonus = true;
             $this->applicaBonus();
         }
 
         $config = Configurazione::load();
         foreach ($this->esami as $esame) {
-            if (in_array($esame->nomeEsame, $config->esami_informatici)) {
+            if (in_array($esame->nomeEsame, $config->esamiInformatici)) {
                 $esame->informatico = true;
             }
         }
@@ -33,15 +33,15 @@ class CarrieraLaureandoInformatica extends CarrieraLaureando
 
     public function getMediaEsamiInformatici(): float
     {
-        $somma = 0;
-        $numero = 0;
+        $num = 0;
+        $den = 0;
         foreach ($this->esami as $esame) {
             if ($esame->faMedia && $esame->informatico) {
-                $somma += (int)$esame->votoEsame * (int)$esame->cfu;
-                $numero += (int)$esame->cfu;
+                $num += (int)$esame->votoEsame * (int)$esame->cfu;
+                $den += (int)$esame->cfu;
             }
         }
-        return $somma / $numero;
+        return $num / $den;
     }
 
     public function getBonus(): bool
@@ -51,13 +51,13 @@ class CarrieraLaureandoInformatica extends CarrieraLaureando
 
     private function applicaBonus(): void
     {
-        $esame_min = null;
+        $esameMin = null;
         foreach ($this->esami as $esame) {
             if (!$esame->faMedia) continue;
-            if (!$esame_min || $esame->votoEsame < $esame_min->votoEsame) {
-                $esame_min = $esame;
+            if (!$esameMin || $esame->votoEsame < $esameMin->votoEsame) {
+                $esameMin = $esame;
             }
         }
-        $esame_min->faMedia = 0;
+        $esameMin->faMedia = 0;
     }
 }

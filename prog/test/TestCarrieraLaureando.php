@@ -6,8 +6,8 @@ class TestCarrieraLaureando extends Test
     public function costruttore(): void
     {
           $val = new CarrieraLaureando(123456);
-          $primo_esame = "ELETTROTECNICA";
-          if ($val->esami[0]->nomeEsame != $primo_esame) {
+          $primoEsame = "ELETTROTECNICA";
+          if ($val->esami[0]->nomeEsame != $primoEsame) {
               throw new Exception("esami non inseriti correttamente");
           }
     }

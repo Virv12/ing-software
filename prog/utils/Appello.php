@@ -13,10 +13,10 @@ class Appello
     private string $dataLaurea;
     private string $cdl;
 
-    public function __construct(array $matricole, string $data_laurea, string $cdl)
+    public function __construct(array $matricole, string $dataLaurea, string $cdl)
     {
         $this->matricole = $matricole;
-        $this->dataLaurea = $data_laurea;
+        $this->dataLaurea = $dataLaurea;
         $this->cdl = $cdl;
     }
 
@@ -41,15 +41,15 @@ class Appello
 
     public function generaProspetti(): bool
     {
-        $prospetti_laureandi = array();
+        $prospettiLaureandi = array();
         foreach ($this->matricole as $matricola) {
             $laureando = CarrieraLaureando::forseInformatico($matricola, $this->cdl, $this->dataLaurea);
-            $prospetto_laureando = new ProspettoLaureando($laureando, $this->cdl, $this->dataLaurea);
-            $prospetto_laureando->generaFile();
-            array_push($prospetti_laureandi, $prospetto_laureando);
+            $prospettoLaureando = new ProspettoLaureando($laureando, $this->cdl, $this->dataLaurea);
+            $prospettoLaureando->generaFile();
+            array_push($prospettiLaureandi, $prospettoLaureando);
         }
-        $prospetto_commissione = new ProspettoCommissione($prospetti_laureandi,  $this->cdl);
-        $prospetto_commissione->generaFile();
+        $prospettoCommissione = new ProspettoCommissione($prospettiLaureandi,  $this->cdl);
+        $prospettoCommissione->generaFile();
         return true;
     }
 

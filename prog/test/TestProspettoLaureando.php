@@ -4,7 +4,7 @@ require_once('test/Test.php');
 
 class TestProspettoLaureando extends Test
 {
-    private function _run_test(string $matricola, string $cdl, string $dataLaurea, array $result): void
+    private function runSingleTest(string $matricola, string $cdl, string $dataLaurea, array $result): void
     {
         $laureando = CarrieraLaureando::forseInformatico($matricola, $cdl, $dataLaurea);
         $prospetto = new ProspettoLaureando($laureando, $cdl, $dataLaurea);
@@ -50,9 +50,9 @@ class TestProspettoLaureando extends Test
         }
     }
 
-    public function mat_123456(): void
+    public function mat123456(): void
     {
-        $this->_run_test("123456", "T. Ing. Informatica", "2023-01-04", [
+        $this->runSingleTest("123456", "T. Ing. Informatica", "2023-01-04", [
             "matricola" => "123456",
             "nome" => "GIUSEPPE",
             "cognome" => "ZEDDE",
@@ -71,9 +71,9 @@ class TestProspettoLaureando extends Test
         ]);
     }
 
-    public function mat_234567(): void
+    public function mat234567(): void
     {
-        $this->_run_test("234567", "M. Ing. Elettronica", "2023-01-04", [
+        $this->runSingleTest("234567", "M. Ing. Elettronica", "2023-01-04", [
             "matricola" => "234567",
             "nome" => "GIOVANNI",
             "cognome" => "ATZENI",
@@ -89,9 +89,9 @@ class TestProspettoLaureando extends Test
         ]);
     }
 
-    public function mat_345678(): void
+    public function mat345678(): void
     {
-        $this->_run_test("345678", "T. Ing. Informatica", "2023-01-04", [
+        $this->runSingleTest("345678", "T. Ing. Informatica", "2023-01-04", [
             "matricola" => "345678",
             "nome" => "LUIGI",
             "cognome" => "BRUSCHELLI",
@@ -110,9 +110,9 @@ class TestProspettoLaureando extends Test
         ]);
     }
 
-    public function mat_456789(): void
+    public function mat456789(): void
     {
-        $this->_run_test("456789", "M. Ing. delle Telecomunicazioni", "2023-01-04", [
+        $this->runSingleTest("456789", "M. Ing. delle Telecomunicazioni", "2023-01-04", [
             "matricola" => "456789",
             "nome" => "JONATAN",
             "cognome" => "BARTOLETTI",
@@ -128,9 +128,9 @@ class TestProspettoLaureando extends Test
         ]);
     }
 
-    public function mat_567890(): void
+    public function mat567890(): void
     {
-        $this->_run_test("567890", "M. Cybersecurity", "2023-01-04", [
+        $this->runSingleTest("567890", "M. Cybersecurity", "2023-01-04", [
             "matricola" => "567890",
             "nome" => "FRANCESCO",
             "cognome" => "ACERBI",

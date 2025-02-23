@@ -43,7 +43,7 @@ class ProspettoLaureando
         }
 
         $cfg = Configurazione::load();
-        assert(array_key_exists($cdl, $cfg->corsi_di_laurea));
+        assert(array_key_exists($cdl, $cfg->corsiDiLaurea));
     }
 
     public function generaFile(): void
@@ -56,112 +56,112 @@ class ProspettoLaureando
     public function generaContenuto(FPDF $pdf, bool $simulazione): void
     {
         $config = Configurazione::load();
-        $cdl = $config->corsi_di_laurea[$this->cdl];
+        $cdl = $config->corsiDiLaurea[$this->cdl];
 
-        $font_family = "Arial";
-        $tipo_informatico = 0;
+        $fontFamily = "Arial";
+        $tipoInformatico = 0;
 
         $pdf->AddPage();
-        $pdf->SetFont($font_family, "", 16);
+        $pdf->SetFont($fontFamily, "", 16);
 
         $pdf->Cell(0, 6, $cdl->nome, 0, 1, 'C');
         $pdf->Cell(0, 8, 'CARRIERA E SIMULAZIONE DEL VOTO DI LAUREA', 0, 1, 'C');
         $pdf->Ln(2);
 
-        $pdf->SetFont($font_family, "", 9);
-        $anagrafica_stringa = "Matricola:                       " . $this->matricola .
+        $pdf->SetFont($fontFamily, "", 9);
+        $anagraficaStringa = "Matricola:                       " . $this->matricola .
             "\nNome:                            " . $this->nome .
             "\nCognome:                      " . $this->cognome .
             "\nEmail:                             " . $this->email .
             "\nData:                              " . $this->dataLaurea;
 
         if ($cdl->nome == "T. Ing. Informatica") {
-            $tipo_informatico = 1;
-            $anagrafica_stringa .= "\nBonus:                            " . ($this->bonus ? "SI" : "NO");
+            $tipoInformatico = 1;
+            $anagraficaStringa .= "\nBonus:                            " . ($this->bonus ? "SI" : "NO");
         }
 
-        $pdf->MultiCell(0, 6, $anagrafica_stringa, 1, 'L');
+        $pdf->MultiCell(0, 6, $anagraficaStringa, 1, 'L');
         $pdf->Ln(3);
 
-        $larghezza_piccola = 12;
+        $larghezzaPiccola = 12;
         $altezza = 5.5;
-        $larghezza_grande = 190 - (3 * $larghezza_piccola);
-        if ($tipo_informatico != 1) {
-            $pdf->Cell($larghezza_grande, $altezza, "ESAME", 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, "CFU", 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, "VOT", 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, "MED", 1, 1, 'C');
+        $larghezzaGrande = 190 - (3 * $larghezzaPiccola);
+        if ($tipoInformatico != 1) {
+            $pdf->Cell($larghezzaGrande, $altezza, "ESAME", 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, "CFU", 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, "VOT", 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, "MED", 1, 1, 'C');
         } else {
-            $larghezza_piccola -= 1;
-            $larghezza_grande = 190 - (4 * $larghezza_piccola);
-            $pdf->Cell($larghezza_grande, $altezza, "ESAME", 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, "CFU", 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, "VOT", 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, "MED", 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, "INF", 1, 1, 'C');
+            $larghezzaPiccola -= 1;
+            $larghezzaGrande = 190 - (4 * $larghezzaPiccola);
+            $pdf->Cell($larghezzaGrande, $altezza, "ESAME", 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, "CFU", 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, "VOT", 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, "MED", 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, "INF", 1, 1, 'C');
         }
 
         $altezza = 4;
-        $pdf->SetFont($font_family, "", 8);
+        $pdf->SetFont($fontFamily, "", 8);
         foreach ($this->esami as $esame) {
-            $pdf->Cell($larghezza_grande, $altezza, $esame->nomeEsame, 1, 0, 'L');
-            $pdf->Cell($larghezza_piccola, $altezza, $esame->cfu, 1, 0, 'C');
-            $pdf->Cell($larghezza_piccola, $altezza, $esame->votoEsame, 1, 0, 'C');
-            if ($tipo_informatico != 1) {
-                $pdf->Cell($larghezza_piccola, $altezza, $esame->faMedia ? 'X' : '', 1, 1, 'C');
+            $pdf->Cell($larghezzaGrande, $altezza, $esame->nomeEsame, 1, 0, 'L');
+            $pdf->Cell($larghezzaPiccola, $altezza, $esame->cfu, 1, 0, 'C');
+            $pdf->Cell($larghezzaPiccola, $altezza, $esame->votoEsame, 1, 0, 'C');
+            if ($tipoInformatico != 1) {
+                $pdf->Cell($larghezzaPiccola, $altezza, $esame->faMedia ? 'X' : '', 1, 1, 'C');
             } else {
-                $pdf->Cell($larghezza_piccola, $altezza, $esame->faMedia ? 'X' : '', 1, 0, 'C');
-                $pdf->Cell($larghezza_piccola, $altezza, $esame->informatico ? 'X' : '', 1, 1, 'C');
+                $pdf->Cell($larghezzaPiccola, $altezza, $esame->faMedia ? 'X' : '', 1, 0, 'C');
+                $pdf->Cell($larghezzaPiccola, $altezza, $esame->informatico ? 'X' : '', 1, 1, 'C');
             }
         }
         $pdf->Ln(5);
 
-        $pdf->SetFont($font_family, "", 9);
+        $pdf->SetFont($fontFamily, "", 9);
         $string  = "Media Pesata (M):                                                  " . $this->media;
         $string .= "\nCrediti che fanno media (CFU):                             " . $this->creditiCheFannoMedia;
         $string .= "\nCrediti curriculari conseguiti:                                  " . $this->creditiCurricolariConseguiti . "/" . $cdl->cfuRichiesti;
         $string .= "\nVoto di Tesi (T):                                                      " . $this->votoTesi;
         $string .= "\nFormula calcolo voto di laurea:                               " . $cdl->formula;
-        if ($tipo_informatico == 1) {
+        if ($tipoInformatico == 1) {
             $string .= "\nMedia pesata esami INF:                                        " . $this->mediaEsamiInformatici;
         }
 
         $pdf->MultiCell(0, 6, $string, 1, "L");
 
         if ($simulazione) {
-            $t_min =  $cdl->Tmin;
-            $t_max =  $cdl->Tmax;
-            $t_step = $cdl->Tstep;
-            $c_min =  $cdl->Cmin;
-            $c_max =  $cdl->Cmax;
-            $c_step = $cdl->Cstep;
-            $CFU = $this->creditiCheFannoMedia;
+            $Tmin =  $cdl->Tmin;
+            $Tmax =  $cdl->Tmax;
+            $Tstep = $cdl->Tstep;
+            $Cmin =  $cdl->Cmin;
+            $Cmax =  $cdl->Cmax;
+            $Cstep = $cdl->Cstep;
+            $cfu = $this->creditiCheFannoMedia;
 
             $pdf->Ln(4);
             $pdf->Cell(0, 5.5, "SIMULAZIONE DI VOTO DI LAUREA", 1, 1, 'C');
             $width = 190 / 2;
             $height = 4.5;
 
-            if ($c_min != 0) {
+            if ($Cmin != 0) {
                 $pdf->Cell($width, $height, "VOTO COMMISSIONE (C)", 1, 0, 'C');
                 $pdf->Cell($width, $height, "VOTO LAUREA", 1, 1, 'C');
                 $M = $this->media;
                 $T = 0;
 
-                for ($C = $c_min; $C <= $c_max; $C += $c_step) {
+                for ($C = $Cmin; $C <= $Cmax; $C += $Cstep) {
                     $voto = 0;
                     eval("\$voto = " . $cdl->formula . ";");
                     $pdf->Cell($width, $height, $C, 1, 0, 'C');
                     $pdf->Cell($width, $height, $voto, 1, 1, 'C');
                 }
             }
-            if ($t_min != 0) {
+            if ($Tmin != 0) {
                 $pdf->Cell($width, $height, "VOTO TESI (T)", 1, 0, 'C');
                 $pdf->Cell($width, $height, "VOTO LAUREA", 1, 1, 'C');
                 $M = $this->media;
                 $C = 0;
 
-                for ($T = $t_min; $T <= $t_max; $T += $t_step) {
+                for ($T = $Tmin; $T <= $Tmax; $T += $Tstep) {
                     $voto = 0;
                     eval("\$voto = " . $cdl->formula . ";");
                     $pdf->Cell($width, $height, $T, 1, 0, 'C');

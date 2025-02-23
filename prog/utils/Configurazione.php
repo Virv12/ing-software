@@ -3,11 +3,11 @@ require_once('utils/CorsoDiLaurea.php');
 
 class Configurazione
 {
-    public $messaggio;
-    public $esami_informatici;
-    public $corsi_di_laurea;
+    public string $messaggio;
+    public array $esamiInformatici;
+    public array $corsiDiLaurea;
 
-    private static $instance = null;
+    private static ?Configurazione $instance = null;
 
     public static function load(): Configurazione
     {
@@ -16,15 +16,15 @@ class Configurazione
 
             self::$instance->messaggio = file_get_contents('config/messaggio.txt');
 
-            $esami_informatici = file_get_contents('config/esami_informatici.json');
-            $esami_informatici = json_decode($esami_informatici, true);
-            self::$instance->esami_informatici = $esami_informatici["nomi_esami"];
+            $esamiInformatici = file_get_contents('config/esami_informatici.json');
+            $esamiInformatici = json_decode($esamiInformatici, true);
+            self::$instance->esamiInformatici = $esamiInformatici["nomi_esami"];
 
-            $formule_laurea = file_get_contents('config/corsi_di_laurea.json');
-            $formule_laurea = json_decode($formule_laurea, true);
-            self::$instance->corsi_di_laurea = [];
+            $corsiDiLaurea = file_get_contents('config/corsi_di_laurea.json');
+            $corsiDiLaurea = json_decode($corsiDiLaurea, true);
+            self::$instance->corsiDiLaurea = [];
 
-            foreach ($formule_laurea as $nome => $value) {
+            foreach ($corsiDiLaurea as $nome => $value) {
                 $cdl = new CorsoDiLaurea();
                 $cdl->nome = $nome;
                 $cdl->formula = $value["formula"];
@@ -35,7 +35,7 @@ class Configurazione
                 $cdl->Cmin = $value["Cmin"];
                 $cdl->Cmax = $value["Cmax"];
                 $cdl->Cstep = $value["Cstep"];
-                self::$instance->corsi_di_laurea[$nome] = $cdl;
+                self::$instance->corsiDiLaurea[$nome] = $cdl;
             }
         }
 
