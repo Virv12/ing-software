@@ -1,4 +1,5 @@
 <?php
+require_once('utils/Configurazione.php');
 require_once('utils/CarrieraLaureando.php');
 require_once('utils/GestioneCarrieraStudente.php');
 

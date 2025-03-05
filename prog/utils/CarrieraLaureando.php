@@ -1,6 +1,4 @@
 <?php
-require_once('utils/CorsoDiLaurea.php');
-require_once('utils/Configurazione.php');
 require_once('utils/EsameLaureando.php');
 require_once('utils/GestioneCarrieraStudente.php');
 require_once('utils/CarrieraLaureandoInformatica.php');

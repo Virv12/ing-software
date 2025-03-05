@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+<html>
 <head>
     <title>Test</title>
     <style>
+    body {
+        background-color: whitesmoke;
+    }
     .test-good {
         color: green;
     }
@@ -10,7 +14,7 @@
     }
     </style>
 </head>
-<body style = "background-color: whitesmoke" >
+<body>
     <?php
     require_once('test/TestGestioneCarrieraStudente.php');
     require_once('test/TestCarrieraLaureando.php');
